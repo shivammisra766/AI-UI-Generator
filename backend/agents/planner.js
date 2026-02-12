@@ -19,7 +19,17 @@ Rules:
 - No comments.
 - No JSX.
 - Use only allowed components.
-- Preserve existing IDs unless explicitly removed.
+If an existing plan is provided:
+- Modify the existing plan.
+- Preserve all existing components unless explicitly removed.
+- Do NOT regenerate from scratch.
+- Keep all existing IDs unchanged.
+- Only add, update, or remove what is requested.
+When modifying an existing plan:
+- Do NOT change component nesting.
+- Do NOT move components between parent nodes.
+- Only add, remove, or update what the user explicitly requests.
+
 
 Allowed components:
 Button
