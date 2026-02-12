@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend Terminal",
+      "type": "shell",
+      "command": "cd backend; node server.js",
+      "presentation": {
+        "panel": "new",
+        "reveal": "always"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Frontend Terminal",
+      "type": "shell",
+      "command": "cd frontend; npm run dev",
+      "presentation": {
+        "panel": "new",
+        "reveal": "always"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
