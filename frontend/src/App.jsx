@@ -263,14 +263,16 @@ function computeDrift(previousPlan, currentPlan) {
     }
   });
 
+  const totalPrev = prevNodes.length || 1;
+
+  const structuralImpact =
+    (removed + added + typeChanged) / totalPrev;
+
   const layoutChanged =
     previousPlan.layout !== currentPlan.layout;
 
   const major =
-    removed > 0 ||
-    added > 0 ||
-    typeChanged > 0 ||
-    layoutChanged;
+    layoutChanged || structuralImpact > 0.4; // 40% threshold
 
   const minor =
     !major &&
@@ -279,6 +281,7 @@ function computeDrift(previousPlan, currentPlan) {
 
   return { major, minor };
 }
+
 
 function generateJSX(node, indent = 0) {
   const space = "  ".repeat(indent);
