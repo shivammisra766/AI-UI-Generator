@@ -297,6 +297,9 @@ HARD ENFORCEMENT RULES (VIOLATION = INVALID OUTPUT):
 When a user repeats a creation request that includes an explicit quantity,
 the system must treat it as an exact state specification,
 not an additive instruction.
+Never include empty strings for any prop.
+If a prop has no value, omit it completely.
+
 
 when no number of components is specified, the system should default to creating a single instance of the requested component type, even if the user repeats the request multiple times. For example, if a user says "Create buttons" without specifying a quantity, the system should create only one button.
 

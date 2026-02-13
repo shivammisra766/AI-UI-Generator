@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 
 export const Input = forwardRef(function Input(
   {
-    label,
+    label="Input",
     name,
     id,
     placeholder,
@@ -17,7 +17,10 @@ export const Input = forwardRef(function Input(
   },
   ref
 ) {
-  const inputId = id || name;
+  const inputId = id || name || label.toLowerCase().replace(/\s+/g, "-");
+  const computedPlaceholder =
+  placeholder ?? `Enter ${label}`;
+
 
   return (
     <div className="w-full flex flex-col gap-2">
@@ -38,7 +41,7 @@ export const Input = forwardRef(function Input(
         value={value}
         onChange={onChange}
         disabled={disabled}
-        placeholder={placeholder}
+        placeholder={computedPlaceholder}
         autoComplete={autoComplete}
         className={`
           w-full

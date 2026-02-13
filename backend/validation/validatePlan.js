@@ -58,13 +58,14 @@ function validateNode(node, depth = 0) {
   const allowedPropsByType = {
     Card: ["title"],
     Button: ["label"],
-    Input: ["placeholder"],
+    Input: ["placeholder", "label"],
     Chart: ["chartType"],
     Table: ["columns", "data"],
     Modal: ["title"]
   };
 
-  const allowedProps = allowedPropsByType[node.type];
+  const allowedProps = allowedPropsByType[node.type] || [];
+
 
   Object.keys(node.props).forEach((propKey) => {
     if (!allowedProps.includes(propKey)) {
@@ -97,15 +98,42 @@ function validateNode(node, depth = 0) {
       }
       break;
 
-    case "Input":
-      if (!node.props.placeholder?.trim()) {
-        throw new AppError(
-          "INVALID_PROPS",
-          `Input requires non-empty "placeholder" prop. Node ID: ${node.id}`,
-          400
-        );
-      }
-      break;
+case "Input": {
+  // 🔥 Remove empty placeholder if AI generated ""
+  if (node.props.placeholder === "") {
+    delete node.props.placeholder;
+  }
+
+  const hasLabel = node.props.label?.trim();
+  const hasPlaceholder = node.props.placeholder?.trim();
+
+  // If neither provided → auto inject label
+  if (!hasLabel && !hasPlaceholder) {
+    node.props.label = "Input";
+  }
+
+  break;
+}
+
+  const hasLabel = node.props.label?.trim();
+  const hasPlaceholder = node.props.placeholder?.trim();
+
+  if (!hasLabel && !hasPlaceholder) {
+  node.props.label = "Input";
+}
+
+
+  if (
+    node.props.placeholder !== undefined &&
+    !node.props.placeholder.trim()
+  ) {
+    throw new AppError(
+      "INVALID_PROPS",
+      `If provided, "placeholder" must be non-empty. Node ID: ${node.id}`,
+      400
+    );
+  }
+  break;
 
     case "Chart":
       if (!["bar", "line", "pie"].includes(node.props.chartType)) {
@@ -146,7 +174,6 @@ function validateNode(node, depth = 0) {
     );
   }
 
-  // 🔥 Proper recursive call with depth increment
   node.children.forEach(child =>
     validateNode(child, depth + 1)
   );
@@ -162,7 +189,6 @@ export function validatePlan(plan) {
     );
   }
 
-  // Prevent unknown root keys
   Object.keys(plan).forEach((key) => {
     if (!allowedRootKeys.includes(key)) {
       throw new AppError(
