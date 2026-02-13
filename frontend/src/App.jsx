@@ -119,22 +119,21 @@ async function executeGeneration(existingPlanToSend) {
   const previousPlan = existingPlanToSend; // ← stable reference
 
   if (previousPlan) {
-    const drift = computeDrift(previousPlan, streamedPlan);
 
-    if (
-  drift.preservationRate < 0.6 ||
-  drift.layoutChanged ||
-  drift.structuralChange
-) {
-  toast("Major UI structure change detected ⚠", {
-    id: "drift-warning",
+   const drift = computeDrift(existingPlanToSend, streamedPlan);
+
+if (drift.major) {
+  toast("Major structural change detected ⚠", {
+    id: "drift-major",
     icon: "⚠",
   });
-} else if (!deepCompare(existingPlanToSend, streamedPlan)) {
+} else if (drift.minor) {
   toast("Minor UI updates applied ✨", {
     id: "drift-minor",
+    icon: "✨",
   });
 }
+
   }
 }
 
@@ -238,50 +237,50 @@ async function handleGenerate() {
 
 function computeDrift(previousPlan, currentPlan) {
   if (!previousPlan || !currentPlan) {
-    return { preservationRate: 1, layoutChanged: false, structuralChange: false };
+    return { major: false, minor: false };
   }
 
   const prevNodes = extractNodes(previousPlan);
   const currNodes = extractNodes(currentPlan);
 
-  if (prevNodes.length === 0) {
-    return { preservationRate: 1, layoutChanged: false, structuralChange: false };
-  }
-
   const prevMap = new Map(prevNodes.map(n => [n.id, n.type]));
   const currMap = new Map(currNodes.map(n => [n.id, n.type]));
 
-  let preserved = 0;
+  let removed = 0;
+  let added = 0;
   let typeChanged = 0;
 
   prevMap.forEach((type, id) => {
-    if (currMap.has(id)) {
-      preserved++;
-
-      if (currMap.get(id) !== type) {
-        typeChanged++;
-      }
+    if (!currMap.has(id)) {
+      removed++;
+    } else if (currMap.get(id) !== type) {
+      typeChanged++;
     }
   });
 
-  const preservationRate = preserved / prevMap.size;
-
-  const nodeCountDifference =
-    Math.abs(prevNodes.length - currNodes.length) /
-    Math.max(prevNodes.length, 1);
+  currMap.forEach((_, id) => {
+    if (!prevMap.has(id)) {
+      added++;
+    }
+  });
 
   const layoutChanged =
     previousPlan.layout !== currentPlan.layout;
 
-  const structuralChange =
-    typeChanged > 0 || nodeCountDifference > 0.3;
+  const major =
+    removed > 0 ||
+    added > 0 ||
+    typeChanged > 0 ||
+    layoutChanged;
 
-  return {
-    preservationRate,
-    layoutChanged,
-    structuralChange
-  };
+  const minor =
+    !major &&
+    JSON.stringify(previousPlan) !==
+      JSON.stringify(currentPlan);
+
+  return { major, minor };
 }
+
 
 function generateJSX(node, indent = 0) {
   const space = "  ".repeat(indent);
