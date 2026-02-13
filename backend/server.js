@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/plan", planRoutes);
+app.use("/", planRoutes);
 
 app.use(errorHander);
 

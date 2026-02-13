@@ -27,7 +27,7 @@ async function executeGeneration(existingPlanToSend) {
     setEditablePlanText("");
     setDriftWarning(false);
 
-    const response = await fetch("http://localhost:5000/plan", {
+    const response = await fetch("http://localhost:5000/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -162,7 +162,7 @@ async function handleGenerate() {
     try {
       const parsed = JSON.parse(editablePlanText);
 
-      const res = await fetch("http://localhost:5000/plan/validate", {
+      const res = await fetch("http://localhost:5000/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: parsed })
