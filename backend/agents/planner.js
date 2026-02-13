@@ -70,6 +70,29 @@ Modal:
   ],
   "modals": []
 }
+
+IMPORTANT:
+Every component MUST include a "props" object.
+Component properties must be inside "props".
+Do NOT place properties at the root level of the component.
+
+Correct Example:
+{
+  "id": "card-1",
+  "type": "Card",
+  "props": {
+    "title": "Dashboard"
+  },
+  "children": []
+}
+
+Incorrect Example (DO NOT DO THIS):
+{
+  "id": "card-1",
+  "type": "Card",
+  "title": "Dashboard"
+}
+
 `;
 
   let fullPrompt;
