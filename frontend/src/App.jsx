@@ -121,11 +121,20 @@ async function executeGeneration(existingPlanToSend) {
   if (previousPlan) {
     const drift = computeDrift(previousPlan, streamedPlan);
 
-    if (drift.preservationRate < 0.6 || drift.layoutChanged) {
-      setDriftWarning(true);
-    } else {
-      setDriftWarning(false);
-    }
+    if (
+  drift.preservationRate < 0.6 ||
+  drift.layoutChanged ||
+  drift.structuralChange
+) {
+  toast("Major UI structure change detected ⚠", {
+    id: "drift-warning",
+    icon: "⚠",
+  });
+} else if (!deepCompare(existingPlanToSend, streamedPlan)) {
+  toast("Minor UI updates applied ✨", {
+    id: "drift-minor",
+  });
+}
   }
 }
 
@@ -229,38 +238,48 @@ async function handleGenerate() {
 
 function computeDrift(previousPlan, currentPlan) {
   if (!previousPlan || !currentPlan) {
-    return {
-      preservationRate: 1,
-      layoutChanged: false
-    };
+    return { preservationRate: 1, layoutChanged: false, structuralChange: false };
   }
 
   const prevNodes = extractNodes(previousPlan);
   const currNodes = extractNodes(currentPlan);
 
   if (prevNodes.length === 0) {
-    return {
-      preservationRate: 1,
-      layoutChanged: false
-    };
+    return { preservationRate: 1, layoutChanged: false, structuralChange: false };
   }
 
-  const prevIds = new Set(prevNodes.map(n => n.id));
-  const currIds = new Set(currNodes.map(n => n.id));
+  const prevMap = new Map(prevNodes.map(n => [n.id, n.type]));
+  const currMap = new Map(currNodes.map(n => [n.id, n.type]));
 
   let preserved = 0;
+  let typeChanged = 0;
 
-  prevIds.forEach(id => {
-    if (currIds.has(id)) preserved++;
+  prevMap.forEach((type, id) => {
+    if (currMap.has(id)) {
+      preserved++;
+
+      if (currMap.get(id) !== type) {
+        typeChanged++;
+      }
+    }
   });
 
-  const preservationRate = preserved / prevIds.size;
+  const preservationRate = preserved / prevMap.size;
+
+  const nodeCountDifference =
+    Math.abs(prevNodes.length - currNodes.length) /
+    Math.max(prevNodes.length, 1);
+
   const layoutChanged =
     previousPlan.layout !== currentPlan.layout;
 
+  const structuralChange =
+    typeChanged > 0 || nodeCountDifference > 0.3;
+
   return {
     preservationRate,
-    layoutChanged
+    layoutChanged,
+    structuralChange
   };
 }
 
