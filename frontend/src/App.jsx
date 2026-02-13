@@ -272,7 +272,7 @@ function computeDrift(previousPlan, currentPlan) {
     previousPlan.layout !== currentPlan.layout;
 
   const major =
-    layoutChanged || structuralImpact > 0.4; // 40% threshold
+    layoutChanged || structuralImpact > 0.7; // 40% threshold
 
   const minor =
     !major &&
