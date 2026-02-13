@@ -211,11 +211,6 @@ When modifying an existing plan:
 - New components must use the next available sequential ID.
 - Never renumber existing components.
 
-
-The layout must NEVER be empty.
-The main array must NEVER be empty.
-Always include at least one meaningful component.
-
 Every component MUST include:
 {
   "id": "string",
@@ -237,9 +232,6 @@ IDs must follow deterministic naming:
 - table-1
 - modal-1
 - chart-1
-
-IDs must be sequential.
-Never reuse an existing ID.
 
 Schema:
 
