@@ -10,10 +10,9 @@ before execution.
 
 ------------------------------------------------------------------------
 
-## 🔥 Live Demo
+## 🔥 Live
 
--   Deployed App:
--   Demo Video (5--7 mins):
+-   Deployed App: https://ai-ui-shivam.vercel.app/
 
 ------------------------------------------------------------------------
 
