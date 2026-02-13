@@ -6,6 +6,7 @@ const [prompt, setPrompt] = useState("");
 const [history, setHistory] = useState([]);
 const [plan, setPlan] = useState(null);
 const [explanation, setExplaination] = useState("");
+const [editablePlanText, setEditablePlanText] = useState("");
 
 async function handleGenerate() {
   const res = await fetch("http://localhost:5000/plan", {
@@ -20,8 +21,9 @@ async function handleGenerate() {
   const data = await res.json();
   console.log("Received plan:", data);
   setHistory(prev => [...prev, {plan: data.plan, explanation: data.explanation}]);
-setPlan(data.plan);
-setExplaination(data.explanation);
+  setPlan(data.plan);
+  setExplaination(data.explanation);
+  setEditablePlanText(JSON.stringify(data.plan, null, 2));
 }
 
 
