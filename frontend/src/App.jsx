@@ -133,7 +133,6 @@ if (drift.major) {
     icon: "✨",
   });
 }
-
   }
 }
 
@@ -280,7 +279,6 @@ function computeDrift(previousPlan, currentPlan) {
 
   return { major, minor };
 }
-
 
 function generateJSX(node, indent = 0) {
   const space = "  ".repeat(indent);
