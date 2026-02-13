@@ -8,11 +8,7 @@ import errorHandler from './middleware/errorMiddleware.js';
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  methods: ["GET", "POST"],
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
