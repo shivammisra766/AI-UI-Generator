@@ -521,7 +521,7 @@ export default GeneratedComponent;
         <div className="flex gap-2 mb-3">
   <button
     onClick={() => setEditorMode("json")}
-    className={`px-4 py-1 rounded-full text-sm transition ${
+    className={`px-4 py-1 cursor-pointer rounded-full text-sm transition ${
       editorMode === "json"
         ? "bg-blue-600 text-white"
         : "bg-gray-800 text-gray-400 hover:bg-gray-700"
@@ -532,7 +532,7 @@ export default GeneratedComponent;
 
   <button
     onClick={() => setEditorMode("jsx")}
-    className={`px-4 py-1 rounded-full text-sm transition ${
+    className={`px-4 py-1 cursor-pointer rounded-full text-sm transition ${
       editorMode === "jsx"
         ? "bg-blue-600 text-white"
         : "bg-gray-800 text-gray-400 hover:bg-gray-700"

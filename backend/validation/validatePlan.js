@@ -23,10 +23,10 @@ function validateNode(node, depth = 0) {
   }
 
   // 🔥 Depth guard
-  if (depth > 5) {
+  if (depth > 10) {
     throw new AppError(
       "MAX_DEPTH_EXCEEDED",
-      "Component nesting depth exceeds safe limit (5).",
+      "Component nesting depth exceeds safe limit (10).",
       400
     );
   }
