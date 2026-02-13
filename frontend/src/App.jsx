@@ -19,10 +19,6 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [promptConflictOpen, setPromptConflictOpen] = useState(false);
 
-  React.useEffect(() => {
-  console.log("PLAN STRUCTURE:", plan);
-}, [plan]);
-
 
 async function executeGeneration(existingPlanToSend) {
   try {
@@ -581,12 +577,13 @@ export default GeneratedComponent;
           <h2 className="text-lg font-semibold text-white">Live Preview</h2>
 
           <div className="border border-gray-800 rounded p-6 bg-gray-900 shadow-lg">
-            {plan.main?.map((node, index) => (
-  <React.Fragment key={node.id || index}>
-    {renderNode(node)}
-  </React.Fragment>
-))}
-
+            {Array.isArray(plan?.main) &&
+  plan.main.map((node, index) => (
+    <React.Fragment key={node.id || index}>
+      {renderNode(node)}
+    </React.Fragment>
+  ))
+}
           </div>
         </div>
       )}
