@@ -4,15 +4,25 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import planRoutes from './routes/planRoutes.js';
-import errorHander from './middleware/errorMiddleware.js';
+import errorHandler from './middleware/errorMiddleware.js';
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 app.use(express.json());
 
-app.use("/", planRoutes);
+app.get("/", (req, res) => {
+  res.send("AI UI Generator API is running 🚀");
+});
 
-app.use(errorHander);
+app.use("/plan", planRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
