@@ -115,11 +115,17 @@ async function executeGeneration(existingPlanToSend) {
         }
       ]);
     }
-    if (plan && streamedPlan) {
-  const drift = computeDrift(plan, streamedPlan);
+    if (receivedPlan && streamedPlan) {
+  const previousPlan = existingPlanToSend; // ← stable reference
 
-  if (drift.preservationRate < 0.6 || drift.layoutChanged) {
-    setDriftWarning(true);
+  if (previousPlan) {
+    const drift = computeDrift(previousPlan, streamedPlan);
+
+    if (drift.preservationRate < 0.6 || drift.layoutChanged) {
+      setDriftWarning(true);
+    } else {
+      setDriftWarning(false);
+    }
   }
 }
 
