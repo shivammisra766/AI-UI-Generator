@@ -19,6 +19,11 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [promptConflictOpen, setPromptConflictOpen] = useState(false);
 
+  React.useEffect(() => {
+  console.log("PLAN STRUCTURE:", plan);
+}, [plan]);
+
+
 async function executeGeneration(existingPlanToSend) {
   try {
     setIsGenerating(true);
