@@ -12,8 +12,7 @@ before execution.
 
 ## 🔥 Live
 
--   Deployed App: https://ai-ui-shivam.vercel.app/
--   // I have taken down the deployed app 
+-   Deployed App: **I have taken down the deployed app** 
 
 ------------------------------------------------------------------------
 
